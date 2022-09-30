@@ -13,9 +13,9 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 	// получаем доступ к текущему соединению
 	conn := c
 
-	r_len, _ := conn.Read(buf)
+	rLen, _ := conn.Read(buf)
 
-	var name = string(buf[:r_len])
+	var name = string(buf[:rLen])
 
 	(*pull)[name] = conn
 
@@ -57,12 +57,13 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 			// if buf[0] == 0 {
 			conn = (*pull)[friend]
 			if conn == nil {
+				fmt.Println("client is pidaras")
 				(*pull)[name].Write([]byte("client is close"))
 				continue
 			}
 
 			// }
-			out_buf := []byte(fmt.Sprintf("%d->>%s\n", friend, out_message))
+			out_buf := []byte(fmt.Sprintf("%s->>%s\n", friend, out_message))
 
 			// Отправить новую строку обратно клиенту
 			_, errWrite := conn.Write(out_buf)
