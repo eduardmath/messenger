@@ -63,7 +63,7 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 			}
 
 			// }
-			out_buf := []byte(fmt.Sprintf("%s->>%s\n", friend, out_message))
+			out_buf := []byte(fmt.Sprintf("%s->>%s\n", name, out_message))
 
 			// Отправить новую строку обратно клиенту
 			_, errWrite := conn.Write(out_buf)
