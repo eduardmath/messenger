@@ -59,13 +59,12 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 			// !!!fatal error!!!
 			// conn = (*pull)[friend]
 			if (*pull)[friend] == nil {
-				fmt.Println("client is pidaras")
 				conn.Write([]byte("client is close"))
 				continue
 			}
 
 			// }
-			out_buf := []byte(fmt.Sprintf("%s->>%s\n", name, out_message))
+			out_buf := []byte(fmt.Sprintf("%s: %s\n", name, out_message))
 
 			// Отправить новую строку обратно клиенту
 			_, errWrite := (*pull)[friend].Write(out_buf)
