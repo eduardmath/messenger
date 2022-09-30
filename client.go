@@ -79,13 +79,20 @@ func main() {
 	var err error
 
 	for i := 1; ; i *= 2 {
-		fmt.Println("Connecting...")
+		fmt.Print("Connecting")
+		for j := 1; j <= 3; j++ {
+			time.Sleep(time.Second / 2)
+			fmt.Print(".")
+		}
+		time.Sleep(time.Second)
+		fmt.Println()
+
 		conn, err = net.Dial("tcp", "127.0.0.1:8081")
-		time.Sleep(time.Second * 2)
 		if err == nil {
 			fmt.Println("Connection is established")
 			break
 		}
+
 		fmt.Print("The connection is not established, please wait ")
 		fmt.Println(i, "s.")
 		time.Sleep(time.Second * time.Duration(i))
