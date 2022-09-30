@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"net"
 	"os"
@@ -77,12 +76,16 @@ func main() {
 	// readConsole(ch)
 
 	var conn net.Conn
-	var err = errors.New("")
+	var err error
 
-	for i := 1; err != nil; i *= 2 {
+	for i := 1; ; i *= 2 {
 		fmt.Println("Connecting...")
 		conn, err = net.Dial("tcp", "127.0.0.1:8081")
 		time.Sleep(time.Second * 2)
+		if err == nil {
+			fmt.Println("Connection is established")
+			break
+		}
 		fmt.Print("The connection is not established, please wait ")
 		fmt.Println(i, "s.")
 		time.Sleep(time.Second * time.Duration(i))
