@@ -103,10 +103,6 @@ func pr(pull *map[string]net.Conn) string {
 		list += "* " + i + "\n"
 	}
 
-	var edu = make([]string, 0)
-
-	edu[1] = "1"
-	
 	for j := 0; j < max+4; j++ {
 		answer += "*"
 	}
