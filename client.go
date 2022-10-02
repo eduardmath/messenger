@@ -62,7 +62,7 @@ func readConsole(ch chan string) {
 			fmt.Println("Error: message is very large")
 			continue
 		}
-		fmt.Print(">")
+		// fmt.Print(">")
 		out := line[:len(line)-1] // убираем символ возврата каретки
 		ch <- out                 // отправляем данные в канал
 	}

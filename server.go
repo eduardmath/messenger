@@ -42,10 +42,12 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 		switch message {
 		case "/h":
 			(*pull)[name].Write([]byte(fmt.Sprintf("%s\n", "help messenger")))
+			continue
 		case "/chat", "/c":
 			pr(pull)
 			// fmt.Println((*pull))
 			(*pull)[name].Write([]byte(fmt.Sprintf("%s\n", pr(pull))))
+			continue
 		}
 
 		// парсинг полученного сообщения
@@ -100,7 +102,12 @@ func pr(pull *map[string]net.Conn) string {
 	}
 
 	for i := range *pull {
-		list += "* " + i + "\n"
+		li := "* " + i
+
+		for j := len(i); j < max; j++ {
+			li += " "
+		}
+		list += li + " *\n"
 	}
 
 	for j := 0; j < max+4; j++ {
