@@ -20,7 +20,7 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 	(*pull)[name] = conn
 
 	// определим, что перед выходом из функции, мы закроем соединение
-	fmt.Println("Accept cnn:", name)
+	fmt.Println("Accept user:", name, len(name))
 	defer conn.Close()
 
 	for {
@@ -41,12 +41,12 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 		// handler commands
 		switch message {
 		case "/h":
-			(*pull)[name].Write([]byte(fmt.Sprintf("%s\n", "help messenger")))
+			conn.Write([]byte(fmt.Sprintf("%s\n", "help messenger")))
 			continue
 		case "/chat", "/c":
 			pr(pull)
 			// fmt.Println((*pull))
-			(*pull)[name].Write([]byte(fmt.Sprintf("%s\n", pr(pull))))
+			conn.Write([]byte(fmt.Sprintf("%s", pr(pull))))
 			continue
 		}
 
@@ -103,6 +103,8 @@ func pr(pull *map[string]net.Conn) string {
 
 	for i := range *pull {
 		li := "* " + i
+
+		fmt.Println((*pull)[i])
 
 		for j := len(i); j < max; j++ {
 			li += " "

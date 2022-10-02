@@ -11,8 +11,10 @@ import (
 
 const buffer int = 1024
 
+var name string
+
 // прием данных из сокета и вывод на печать
-func readSock(conn net.Conn) {
+func readSock(conn *net.Conn) {
 
 	if conn == nil {
 		panic("Connection is nil")
@@ -26,18 +28,19 @@ func readSock(conn net.Conn) {
 		for i := 0; i < buffer; i++ {
 			buf[i] = 0
 		}
-
-		readed_len, err := conn.Read(buf)
+		readedLen, err := (*conn).Read(buf)
+		fmt.Println(*conn, name)
 		if err != nil {
 			if err.Error() == "EOF" {
 				eof_count++
 				time.Sleep(time.Second * 2)
-				fmt.Println("EOF")
-
-				if eof_count > 7 {
-					fmt.Println("Timeout connection")
-					break
-				}
+				checkConn(conn)
+				fmt.Println(*conn, name)
+				(*conn).Write([]byte(name)[:len(name)])
+				//if eof_count > 7 {
+				//	fmt.Println("Timeout connection")
+				//	break
+				//}
 				continue
 			}
 			if strings.Index(err.Error(), "use of closed network connection") > 0 {
@@ -47,7 +50,7 @@ func readSock(conn net.Conn) {
 			}
 			panic(err.Error())
 		}
-		if readed_len > 0 {
+		if readedLen > 0 {
 			fmt.Println(string(buf))
 		}
 
@@ -61,6 +64,9 @@ func readConsole(ch chan string) {
 		if len(line) > buffer {
 			fmt.Println("Error: message is very large")
 			continue
+		}
+		if len(name) == 0 {
+			name = line
 		}
 		// fmt.Print(">")
 		out := line[:len(line)-1] // убираем символ возврата каретки
@@ -77,11 +83,12 @@ func main() {
 
 	var conn net.Conn
 	checkConn(&conn)
+	fmt.Println(conn)
 
 	fmt.Print("Enter your name: ")
 
 	go readConsole(ch)
-	go readSock(conn)
+	go readSock(&conn)
 
 	for {
 		val, ok := <-ch
