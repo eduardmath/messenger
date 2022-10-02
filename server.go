@@ -38,6 +38,16 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 		//fmt.Println("Received Message:", read_len, buf)
 		var message = string(buf[:readed_len])
 
+		// handler commands
+		switch message {
+		case "/h":
+			(*pull)[name].Write([]byte(fmt.Sprintf("%s\n", "help messenger")))
+		case "/chat", "/c":
+			pr(pull)
+			// fmt.Println((*pull))
+			(*pull)[name].Write([]byte(fmt.Sprintf("%s\n", pr(pull))))
+		}
+
 		// парсинг полученного сообщения
 		_, err = fmt.Sscanf(message, "%s", &friend) // определи номер клиента
 
@@ -77,6 +87,33 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 		}
 
 	}
+}
+
+func pr(pull *map[string]net.Conn) string {
+	var max int
+	var list, answer string
+
+	for i := range *pull {
+		if max < len(i) {
+			max = len(i)
+		}
+	}
+
+	for i := range *pull {
+		list += "* " + i + "\n"
+	}
+
+	var edu = make([]string, 0)
+
+	edu[1] = "1"
+	
+	for j := 0; j < max+4; j++ {
+		answer += "*"
+	}
+	answer += "\n"
+
+	answer = answer + list + answer
+	return answer
 }
 
 func main() {
