@@ -34,9 +34,12 @@ func readSock(conn *net.Conn) {
 			if err.Error() == "EOF" {
 				eof_count++
 				time.Sleep(time.Second * 2)
+
 				checkConn(conn)
 				fmt.Println(*conn, name)
 				(*conn).Write([]byte(name)[:len(name)])
+				// ch <- out
+
 				//if eof_count > 7 {
 				//	fmt.Println("Timeout connection")
 				//	break
