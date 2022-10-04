@@ -36,7 +36,10 @@ func readSock(conn *net.Conn) {
 				time.Sleep(time.Second * 2)
 
 				checkConn(conn)
-				fmt.Println(*conn, name)
+				// fmt.Println(*conn, name)
+
+				var b []byte
+				(*conn).Read(b)
 				(*conn).Write([]byte(name)[:len(name)])
 				// ch <- out
 
