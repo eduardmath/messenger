@@ -29,7 +29,7 @@ func readSock(conn *net.Conn) {
 			buf[i] = 0
 		}
 		readedLen, err := (*conn).Read(buf)
-		fmt.Println(*conn, name)
+		// fmt.Println(*conn, name)
 		if err != nil {
 			if err.Error() == "EOF" {
 				eof_count++
@@ -38,9 +38,9 @@ func readSock(conn *net.Conn) {
 				checkConn(conn)
 				// fmt.Println(*conn, name)
 
-				var b []byte
-				(*conn).Read(b)
-				(*conn).Write([]byte(name)[:len(name)])
+				// var b []byte
+				// (*conn).Read(b)
+				(*conn).Write([]byte(name)[:len(name)-1])
 				// ch <- out
 
 				//if eof_count > 7 {
@@ -89,7 +89,7 @@ func main() {
 
 	var conn net.Conn
 	checkConn(&conn)
-	fmt.Println(conn)
+	// fmt.Println(conn)
 
 	fmt.Print("Enter your name: ")
 

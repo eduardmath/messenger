@@ -20,7 +20,7 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 	(*pull)[name] = conn
 
 	// определим, что перед выходом из функции, мы закроем соединение
-	fmt.Println("Accept user:", name, len(name))
+	fmt.Println("Accept user:", name)
 	defer conn.Close()
 
 	for {
@@ -102,14 +102,11 @@ func pr(pull *map[string]net.Conn) string {
 	}
 
 	for i := range *pull {
-		li := "* " + i
-
-		fmt.Println((*pull)[i])
-
+		line := "* " + i
 		for j := len(i); j < max; j++ {
-			li += " "
+			line += " "
 		}
-		list += li + " *\n"
+		list += line + " *\n"
 	}
 
 	for j := 0; j < max+4; j++ {
