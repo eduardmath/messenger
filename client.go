@@ -28,25 +28,14 @@ func readSock(conn *net.Conn) {
 		for i := 0; i < buffer; i++ {
 			buf[i] = 0
 		}
-		readedLen, err := (*conn).Read(buf)
-		// fmt.Println(*conn, name)
+		readLen, err := (*conn).Read(buf)
 		if err != nil {
 			if err.Error() == "EOF" {
 				eof_count++
 				time.Sleep(time.Second * 2)
 
 				checkConn(conn)
-				// fmt.Println(*conn, name)
-
-				// var b []byte
-				// (*conn).Read(b)
 				(*conn).Write([]byte(name)[:len(name)-1])
-				// ch <- out
-
-				//if eof_count > 7 {
-				//	fmt.Println("Timeout connection")
-				//	break
-				//}
 				continue
 			}
 			if strings.Index(err.Error(), "use of closed network connection") > 0 {
@@ -56,7 +45,7 @@ func readSock(conn *net.Conn) {
 			}
 			panic(err.Error())
 		}
-		if readedLen > 0 {
+		if readLen > 0 {
 			fmt.Println(string(buf))
 		}
 
@@ -71,10 +60,11 @@ func readConsole(ch chan string) {
 			fmt.Println("Error: message is very large")
 			continue
 		}
+
 		if len(name) == 0 {
 			name = line
 		}
-		// fmt.Print(">")
+
 		out := line[:len(line)-1] // убираем символ возврата каретки
 		ch <- out                 // отправляем данные в канал
 	}
@@ -85,11 +75,8 @@ func main() {
 
 	defer close(ch) // закрываем канал при выходе из программы
 
-	// readConsole(ch)
-
 	var conn net.Conn
 	checkConn(&conn)
-	// fmt.Println(conn)
 
 	fmt.Print("Enter your name: ")
 
@@ -99,7 +86,6 @@ func main() {
 	for {
 		val, ok := <-ch
 		if ok { // если есть данные, то их пишем в сокет
-			// val_len := len(val)
 			out := []byte(val)
 			_, err := conn.Write(out)
 			if err != nil {
@@ -108,8 +94,6 @@ func main() {
 			}
 
 		} else {
-			// данных в канале нет, задержка на 2 секунды
-
 			time.Sleep(time.Second * 2)
 		}
 

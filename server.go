@@ -24,7 +24,7 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 	defer conn.Close()
 
 	for {
-		readedLen, err := conn.Read(buf)
+		readLen, err := conn.Read(buf)
 		if err != nil {
 			if err.Error() == "EOF" {
 				fmt.Println("Close ", name)
@@ -35,8 +35,7 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 		}
 
 		// Распечатываем полученое сообщение
-		//fmt.Println("Received Message:", read_len, buf)
-		var message = string(buf[:readedLen])
+		var message = string(buf[:readLen])
 
 		// handler commands
 		switch message {
@@ -59,23 +58,15 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 			continue
 		}
 		pos := strings.Index(message, " ") // нашли позицию разделителя
-		// friend = message[:pos]
-		// _f, err = fmt.Sscan(message[:pos], &friend) // определи номер клиента
 
 		if pos > 0 {
 			outMessage := message[pos+1:] // отчистили сообщение от номера клиента
-			// Распечатываем полученое сообщение
 
-			// if buf[0] == 0 {
-
-			// !!!fatal error!!!
-			// conn = (*pull)[friend]
 			if (*pull)[friend] == nil {
 				conn.Write([]byte("client is close"))
 				continue
 			}
 
-			// }
 			out_buf := []byte(fmt.Sprintf("%s: %s\n", name, outMessage))
 
 			// Отправить новую строку обратно клиенту
