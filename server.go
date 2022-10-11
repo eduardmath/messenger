@@ -116,7 +116,7 @@ func pr(pull *map[string]net.Conn) string {
 func main() {
 	// database
 	log.Println("starting program")
-	databaseUrl := "postgres://postgres:postgres@localhost:5432"
+	databaseUrl := "postgres://postgres:postgres@localhost:55001"
 	dbPool, err := pgxpool.New(context.Background(), databaseUrl)
 
 	if err != nil {
@@ -124,7 +124,7 @@ func main() {
 		os.Exit(1)
 	}
 	defer dbPool.Close()
-
+	ExecuteInsert(dbPool)
 	// end
 
 	// start server
@@ -160,17 +160,17 @@ func main() {
 	}
 }
 
-//func ExecuteInsert(pool *pgxpool.Pool) {
-//	var f, l, d string
-//	fmt.Scan(&f, &l, &d)
-//	var id int
-//	err := pool.QueryRow(context.Background(), "INSERT INTO users (first_name, last_name, date) VALUES ($1, $2, $3) RETURNING id", f, l, d).Scan(&id)
-//	if err != nil {
-//		panic(err)
-//	}
-//	fmt.Println("New record ID is:", id)
-//
-//}
+func ExecuteInsert(pool *pgxpool.Pool) {
+	var f, l, d string
+	fmt.Scan(&f, &l, &d)
+	var id int
+	err := pool.QueryRow(context.Background(), "INSERT INTO users (first_name, last_name, date) VALUES ($1, $2, $3) RETURNING id", f, l, d).Scan(&id)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("New record ID is:", id)
+
+}
 //func ExecuteSelectQuery(dbPool *pgxpool.Pool) {
 //	log.Println("starting execution of select query")
 //
