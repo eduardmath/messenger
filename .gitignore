@@ -1,5 +1,2 @@
-.idea
-go.mod
-go.sum
 server
 client
