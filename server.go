@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"log"
 	"net"
+	"os"
 	"strings"
 )
 
@@ -110,6 +114,19 @@ func pr(pull *map[string]net.Conn) string {
 }
 
 func main() {
+	// database
+	log.Println("starting program")
+	databaseUrl := "postgres://postgres:postgres@localhost:5432"
+	dbPool, err := pgxpool.New(context.Background(), databaseUrl)
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to create connection pool: %v\n", err)
+		os.Exit(1)
+	}
+	defer dbPool.Close()
+
+	// end
+
 	// start server
 	fmt.Println("Start server...")
 
@@ -142,3 +159,70 @@ func main() {
 		go process(&pull, conn)
 	}
 }
+
+//func ExecuteInsert(pool *pgxpool.Pool) {
+//	var f, l, d string
+//	fmt.Scan(&f, &l, &d)
+//	var id int
+//	err := pool.QueryRow(context.Background(), "INSERT INTO users (first_name, last_name, date) VALUES ($1, $2, $3) RETURNING id", f, l, d).Scan(&id)
+//	if err != nil {
+//		panic(err)
+//	}
+//	fmt.Println("New record ID is:", id)
+//
+//}
+//func ExecuteSelectQuery(dbPool *pgxpool.Pool) {
+//	log.Println("starting execution of select query")
+//
+//	// execute the query and get result rows
+//	rows, err := dbPool.Query(context.Background(), "select * from users")
+//	if err != nil {
+//		log.Fatal("error while executing query")
+//	}
+//
+//	log.Println("result:")
+//
+//	// iterate through the rows
+//	for rows.Next() {
+//		values, err := rows.Values()
+//		if err != nil {
+//			log.Fatal("error while iterating dataset")
+//		}
+//
+//		// convert DB types to Go types
+//		id := values[0].(int32)
+//		firstName := values[1].(string)
+//		lastName := values[2].(string)
+//		dateOfBirth := values[3].(string) // (string) // values[3].(time.Time)
+//		log.Println("[id:", id, ", first_name:", firstName, ", last_name:", lastName, ", date:", dateOfBirth, "]")
+//	}
+//
+//}
+//func ExecuteFunction(dbPool *pgxpool.Pool, id int) {
+//	log.Println("starting execution of database function")
+//
+//	// execute the query and get result rows
+//	rows, err := dbPool.Query(context.Background(), "select * from get_ttt($1)", id)
+//	log.Println("input id: ", id)
+//	if err != nil {
+//		log.Fatal("error while executing query")
+//	}
+//
+//	log.Println("result:")
+//
+//	// iterate through the rows
+//	for rows.Next() {
+//		values, err := rows.Values()
+//		if err != nil {
+//			log.Fatal("error while iterating dataset")
+//		}
+//
+//		//convert DB types to Go types
+//		firstName := values[0].(string)
+//		lastName := values[1].(string)
+//		dateOfBirth := values[2].(time.Time)
+//
+//		log.Println("[first_name:", firstName, ", last_name:", lastName, ", date:", dateOfBirth, "]")
+//	}
+//
+//}
