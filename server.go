@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
+	"crypto/md5"
 	"fmt"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
 	"net"
 	"os"
 	"strings"
+	"time"
 )
 
 func process(pull *map[string]net.Conn, c net.Conn) {
@@ -114,9 +116,19 @@ func pr(pull *map[string]net.Conn) string {
 }
 
 func main() {
+	// md5
+	fmt.Printf("%x\n", md5.Sum([]byte("hello")))
+
+	// time
+	t := time.Now()
+	fmt.Println(t)
+	year, month, day := t.Date()
+	fmt.Println(year, month, day)
+	return
+
 	// database
 	log.Println("starting program")
-	databaseUrl := "postgres://postgres:postgres@localhost:55001"
+	databaseUrl := "postgres://postgres:postgres@localhost:55000"
 	dbPool, errDB := pgxpool.New(context.Background(), databaseUrl)
 
 	if errDB != nil {
