@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"server_new/cmd/database"
 	"strings"
 	"time"
 )
@@ -49,9 +50,9 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 			conn.Write([]byte(fmt.Sprintf("%s\n", "help messenger")))
 			continue
 		case "/chat", "/c":
-			pr(pull)
+			allUsers(pull)
 			// fmt.Println((*pull))
-			conn.Write([]byte(fmt.Sprintf("%s", pr(pull))))
+			conn.Write([]byte(fmt.Sprintf("%s", allUsers(pull))))
 			continue
 		}
 
@@ -88,7 +89,7 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 	}
 }
 
-func pr(pull *map[string]net.Conn) string {
+func allUsers(pull *map[string]net.Conn) string {
 	var max int
 	var list, answer string
 
@@ -116,15 +117,22 @@ func pr(pull *map[string]net.Conn) string {
 }
 
 func main() {
+	// module
+	db := database.Database{}
+	fmt.Println(db.Print("hello"))
+	// return
+
 	// md5
 	fmt.Printf("%x\n", md5.Sum([]byte("hello")))
+	fmt.Printf("%x\n", md5.Sum([]byte("hella")))
+	return
 
 	// time
 	t := time.Now()
 	fmt.Println(t)
 	year, month, day := t.Date()
 	fmt.Println(year, month, day)
-	return
+	// return
 
 	// database
 	log.Println("starting program")
@@ -136,7 +144,7 @@ func main() {
 		os.Exit(1)
 	}
 	defer dbPool.Close()
-	ExecuteSelectQuery(dbPool)
+	// ExecuteSelectQuery(dbPool)
 	// end
 
 	// start server

@@ -21,7 +21,7 @@ func readSock(conn *net.Conn) {
 	}
 
 	buf := make([]byte, buffer)
-	eof_count := 0
+	// eof_count := 0
 
 	for {
 		// чистим буфер
@@ -31,7 +31,7 @@ func readSock(conn *net.Conn) {
 		readLen, err := (*conn).Read(buf)
 		if err != nil {
 			if err.Error() == "EOF" {
-				eof_count++
+				// eof_count++
 				time.Sleep(time.Second * 2)
 
 				checkConn(conn)
@@ -105,7 +105,11 @@ func main() {
 
 func checkConn(conn *net.Conn) {
 	var err error
-	for i := 1; ; i *= 2 {
+	i := 1
+	for {
+		if i < 64 {
+			i *= 2
+		}
 		fmt.Print("Connecting")
 		for j := 1; j <= 3; j++ {
 			time.Sleep(time.Second / 2)
