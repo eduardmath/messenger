@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"server_new/cmd/database"
 	"strings"
 )
 
@@ -13,6 +14,7 @@ func process(pull *map[string]net.Conn, c net.Conn) {
 	// получаем доступ к текущему соединению
 	conn := c
 
+	// did check user to database
 	rLen, _ := conn.Read(buf)
 
 	var name = string(buf[:rLen])
@@ -111,7 +113,9 @@ func allUsers(pull *map[string]net.Conn) string {
 
 func main() {
 	// module database
-	// db := database.Database{}
+	db := database.Database{}
+	fmt.Println(db.CheckUser("eduard"))
+	return
 
 	// start server
 	fmt.Println("Start server...")

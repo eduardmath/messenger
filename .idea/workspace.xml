@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd733734-c380-4015-9a40-9c9678672b0d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a3bcc3c8-24ec-4ebc-a47f-64866dff8c13.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a3bcc3c8-24ec-4ebc-a47f-64866dff8c13.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a3bcc3c8-24ec-4ebc-a47f-64866dff8c13/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a3bcc3c8-24ec-4ebc-a47f-64866dff8c13/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/database/database.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/database/database.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/main/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main/client.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/main/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main/server.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

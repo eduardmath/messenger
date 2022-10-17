@@ -31,30 +31,40 @@ func help() {
 
 }
 
-func (db Database) Print(s string) string {
-	var ss string
-	var len = len(s)
-	for i := 0; i < len; i++ {
-		ss += string(s[len-i-1])
-	}
+func (db *Database) Print() *pgxpool.Pool {
+	fmt.Println(db.pool)
 
-	return ss
+	return db.pool
 }
 
-func (db Database) CheckUser(name string) bool {
-	return true
-}
-
-func (db Database) Connect() bool {
+func (db *Database) Connect() bool {
 	var errDB error
 	db.pool, errDB = pgxpool.New(context.Background(), databaseUrl)
-
 	if errDB != nil {
 		return false
 	}
 	defer db.pool.Close()
-
 	return true
+}
+
+func (db *Database) CheckUser(name string) bool {
+	db.pool, _ = pgxpool.New(context.Background(), databaseUrl)
+	rows, err := db.pool.Query(context.Background(), "select username from users")
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	for rows.Next() {
+		values, err := rows.Values()
+		if err != nil {
+			fmt.Println("error while iterating dataset")
+		}
+
+		if values[0].(string) == name {
+			return true
+		}
+	}
+	return false
 }
 
 func ExecuteInsert(pool *pgxpool.Pool) {
@@ -93,6 +103,23 @@ func ExecuteSelectQuery(dbPool *pgxpool.Pool) {
 		lastName := values[2].(string)
 		dateOfBirth := values[3].(string) // (string) // values[3].(time.Time)
 		log.Println("[id:", id, ", first_name:", firstName, ", last_name:", lastName, ", date:", dateOfBirth, "]")
+	}
+}
+func ExecuteSelect(dbPool *pgxpool.Pool) {
+	// execute the query and get result rows
+	rows, err := dbPool.Query(context.Background(), "select * from users")
+	if err != nil {
+		log.Fatal("error while executing query")
+	}
+
+	for rows.Next() {
+		values, err := rows.Values()
+		if err != nil {
+			log.Fatal("error while iterating dataset")
+		}
+
+		firstName := values[1].(string)
+		log.Println("user:", firstName)
 	}
 }
 

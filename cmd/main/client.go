@@ -78,7 +78,7 @@ func main() {
 	var conn net.Conn
 	checkConn(&conn)
 
-	fmt.Print("Enter your name: ")
+	input(&conn)
 
 	go readConsole(ch)
 	go readSock(&conn)
@@ -101,6 +101,11 @@ func main() {
 	fmt.Println("Finished...")
 
 	conn.Close()
+}
+
+func input(conn *net.Conn) {
+	fmt.Print("Enter your name: ")
+	(*conn).Write([]byte("jdskfjkds"))
 }
 
 func checkConn(conn *net.Conn) {
